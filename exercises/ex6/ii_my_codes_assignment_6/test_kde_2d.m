@@ -1,0 +1,15 @@
+rng(42);
+true_cn = randi([8, 12], 1);
+spread = 5*rand(1)+1;
+selection_priors = rand(1,true_cn) + 0.2;
+selection_priors = selection_priors / sum(selection_priors);
+obj = gmdistribution(randn(true_cn,2)*spread,repmat(eye(2),[1 1 true_cn]), selection_priors);
+%data = random(obj, 1000);
+data = random(obj, 100);
+maxv = max(data,[],1);
+minv = min(data,[],1);
+steps = 100;
+%steps = 10000;
+xrange=linspace(minv(1), maxv(1), steps);
+yrange=linspace(minv(2), maxv(2), steps);
+visualize_kde_2d(data,xrange,yrange,@(x) pdf(obj, x));
